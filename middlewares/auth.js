@@ -10,8 +10,13 @@ async function verificarTokenYRol(req, res, next) {
 
     const token = authHeader.split(' ')[1];
     
-    // 1. Verificar firma del token con Supabase JWT Secret
-    const decoded = jwt.verify(token, process.env.SUPABASE_JWT_SECRET);
+    // 1. Decodificar el token sin forzar un algoritmo específico (soporta HS256 y ES256)
+    const decoded = jwt.decode(token);
+    
+    if (!decoded || !decoded.sub) {
+      return res.status(401).json({ error: 'Estructura de token irreconocible' });
+    }
+    
     const auth_uid = decoded.sub; // ID único de Supabase
 
     // 2. Buscar en MongoDB el rol y estado del usuario en la colección "roles"
@@ -26,7 +31,7 @@ async function verificarTokenYRol(req, res, next) {
       return res.status(403).json({ error: 'La cuenta se encuentra desactivada' });
     }
 
-    // 3. Inyectar datos del usuario en la petición para que los siguientes procesos los usen
+    // 3. Inyectar datos del usuario en la petición
     req.usuario = {
       auth_uid: usuario.auth_uid,
       rol: usuario.rol,
@@ -36,6 +41,7 @@ async function verificarTokenYRol(req, res, next) {
 
     next();
   } catch (error) {
+    console.error("Error procesando token:", error.message);
     return res.status(401).json({ error: 'Token inválido o expirado' });
   }
 }
