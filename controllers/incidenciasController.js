@@ -164,4 +164,37 @@ async function actualizarEstadoIncidencia(req, res) {
     res.status(500).json({ error: 'Error al procesar la actualización', detalle: error.message });
   }
 }
-module.exports = { obtenerIncidencias, crearIncidencia, actualizarEstadoIncidencia };
+async function obtenerEstadisticasDashboard(req, res) {
+  try {
+    const db = getDB();
+    
+    // Usamos el Aggregation Framework de MongoDB para calcular todo en una sola consulta
+    const pipeline = [
+      {
+        $facet: {
+          "total_incidencias": [ { $count: "total" } ],
+          "por_estado": [ { $group: { _id: "$estado", cantidad: { $sum: 1 } } } ],
+          "por_categoria": [ { $group: { _id: "$categoria", cantidad: { $sum: 1 } } } ],
+          "horas_totales": [ { $group: { _id: null, total_horas: { $sum: "$horas_invertidas_totales" } } } ]
+        }
+      }
+    ];
+
+    const resultados = await db.collection('incidencias_campus').aggregate(pipeline).toArray();
+    const data = resultados[0];
+
+    // Formateamos la respuesta para que el frontend la consuma fácilmente
+    const estadisticas = {
+      total: data.total_incidencias[0] ? data.total_incidencias[0].total : 0,
+      horas_tecnicas_invertidas: data.horas_totales[0] ? data.horas_totales[0].total_horas : 0,
+      desglose_estados: data.por_estado,
+      desglose_categorias: data.por_categoria
+    };
+
+    res.json(estadisticas);
+  } catch (error) {
+    console.error("Error al generar analíticas:", error);
+    res.status(500).json({ error: 'Error al procesar el dashboard' });
+  }
+}
+module.exports = { obtenerIncidencias, crearIncidencia, actualizarEstadoIncidencia, obtenerEstadisticasDashboard };
