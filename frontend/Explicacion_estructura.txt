@@ -1,0 +1,10 @@
+frontend/
+├── index.html
+├── css/
+│   └── styles.css
+└── js/
+    ├── app.js         (Núcleo, catálogos, datos iniciales y estado global)
+    ├── navigation.js  (Roles, vistas y navegación del menú lateral)
+    ├── tickets.js     (Formulario polimórfico, evidencias y creación de reportes)
+    ├── kanban.js      (Tablero Kanban, modos de visualización y modal de actualización)
+    └── analytics.js   (KPIs, gráficos analíticos y panel de administración)

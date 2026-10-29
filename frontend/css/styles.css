@@ -1,0 +1,178 @@
+/* ---------- Pantalla de Login ---------- */
+#loginScreen {
+    transition: opacity .35s ease, visibility .35s ease;
+}
+
+#loginScreen.hidden-login {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* ---------- Campos polimórficos: aparición suave ---------- */
+.dyn {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: grid-template-rows .45s ease, opacity .35s ease, transform .35s ease, margin .45s ease;
+    margin-top: 0;
+}
+
+.dyn.open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transform: none;
+    margin-top: 1.25rem;
+}
+
+.dyn>.dyn-inner {
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* ---------- Vistas ---------- */
+.view {
+    display: none;
+}
+
+.view.active {
+    display: block;
+    animation: fadeUp .4s ease both;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ---------- Inputs ---------- */
+.field {
+    width: 100%;
+    border-radius: .75rem;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    padding: .65rem .9rem;
+    font-size: .9rem;
+    color: #111827;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.field:focus {
+    outline: none;
+    border-color: #15803d;
+    box-shadow: 0 0 0 4px rgba(21, 128, 61, .12);
+}
+
+.label {
+    display: block;
+    font-size: .78rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: .35rem;
+    letter-spacing: .01em;
+}
+
+/* ---------- Kanban ---------- */
+.k-col.drag-over {
+    background: #dcfce7;
+    outline: 2px dashed #16a34a;
+}
+
+.k-card {
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.k-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -10px rgba(21, 128, 61, .35);
+}
+
+.k-card.dragging {
+    opacity: .5;
+    transform: rotate(2deg);
+}
+
+/* ---------- Barras animadas ---------- */
+.bar {
+    width: 0;
+    transition: width 1s cubic-bezier(.2, .8, .2, 1);
+}
+
+/* ---------- Modal ---------- */
+.modal {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+}
+
+.modal.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal .panel {
+    transform: translateY(20px) scale(.97);
+    transition: transform .3s cubic-bezier(.2, .8, .2, 1);
+}
+
+.modal.show .panel {
+    transform: none;
+}
+
+/* ---------- Toast ---------- */
+.toast {
+    animation: toastIn .35s ease both;
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ---------- JSON preview ---------- */
+.json-key {
+    color: #86efac;
+}
+
+.json-str {
+    color: #fde68a;
+}
+
+.json-num {
+    color: #93c5fd;
+}
+
+.json-bool {
+    color: #f9a8d4;
+}
+
+.nav-item.active {
+    background: rgba(255, 255, 255, .14);
+    color: #fff;
+    box-shadow: inset 3px 0 0 #bbf7d0;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 8px;
+}
