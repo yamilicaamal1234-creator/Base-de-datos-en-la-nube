@@ -101,6 +101,18 @@ async function seedRoles() {
       );
     }
 
+    const usuariosExistentes = await rolesCol.find(
+      {},
+      { projection: { auth_uid: 1 } }
+    ).toArray();
+    for (const usuario of usuariosExistentes) {
+      await credencialesCol.updateOne(
+        { auth_uid: usuario.auth_uid },
+        { $setOnInsert: { auth_uid: usuario.auth_uid, password_hash: passwordHash } },
+        { upsert: true }
+      );
+    }
+
     const total = await rolesCol.countDocuments();
     console.log('✅ Roles sincronizados exitosamente. Total usuarios en roles:', total);
   } catch (err) {
