@@ -3,7 +3,7 @@
    Conexión con el Backend Node.js / Express y MongoDB Atlas
    ========================================================= */
 
-const API_BASE_URL = 'https://utm-desk-t096.onrender.com/api';
+const API_BASE_URL = 'https://utm-desk-t096.onrender.com/';
 
 /** Obtiene el token JWT almacenado */
 function getToken() {
