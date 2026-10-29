@@ -3,7 +3,11 @@ const { getDB } = require('../config/db');
 const { ObjectId } = require('mongodb');
 const crypto = require('crypto');
 
-const JWT_SECRET = process.env.SUPABASE_JWT_SECRET || 'utm_desk_secret_key_2026';
+const JWT_SECRET = process.env.SUPABASE_JWT_SECRET;
+
+if (!JWT_SECRET) {
+  throw new Error('SUPABASE_JWT_SECRET no está configurado');
+}
 
 // Roles que NO deben tener campo "perfil" según el validador de MongoDB
 const ROLES_SIN_PERFIL = ['tecnico', 'coordinador', 'directivo', 'administrador'];
