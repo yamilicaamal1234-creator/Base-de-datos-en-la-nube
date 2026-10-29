@@ -100,9 +100,17 @@ async function apiGetUsuarios() {
     return await apiFetch('/auth/usuarios');
 }
 
+/** Crear usuario institucional */
+async function apiCrearUsuario(payload) {
+    return await apiFetch('/auth/usuarios', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+    });
+}
+
 /** Actualizar rol o estado de un usuario */
 async function apiActualizarUsuario(auth_uid, payload) {
-    return await apiFetch(`/auth/usuarios/${auth_uid}`, {
+    return await apiFetch(`/auth/usuarios/${encodeURIComponent(auth_uid)}`, {
         method: 'PUT',
         body: JSON.stringify(payload),
     });

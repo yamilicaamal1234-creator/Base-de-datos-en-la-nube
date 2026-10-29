@@ -76,9 +76,6 @@
                     <i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión
                 </button>
 
-                <div class="text-center pt-2">
-                    <p class="text-[11px] text-gray-400">Prototipo UTM Desk NoSQL Cloud · Acceso de demostración</p>
-                </div>
             </form>
         </div>
     </div>
@@ -127,20 +124,6 @@
                             incidencias</p>
                     </div>
                     <div class="ml-auto flex items-center gap-3">
-                        <div class="relative">
-                            <i
-                                class="fa-solid fa-user-shield absolute left-3 top-1/2 -translate-y-1/2 text-green-700 text-sm"></i>
-                            <select id="roleSelect"
-                                class="appearance-none pl-9 pr-9 py-2 rounded-xl border border-green-200 bg-green-50 text-green-900 text-sm font-semibold focus:outline-none focus:ring-4 focus:ring-green-100 cursor-pointer">
-                                <option>Reportante</option>
-                                <option>Técnico</option>
-                                <option>Coordinador</option>
-                                <option>Directivo</option>
-                                <option>Administrador</option>
-                            </select>
-                            <i
-                                class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-green-700 text-xs pointer-events-none"></i>
-                        </div>
                         <button
                             class="relative w-10 h-10 rounded-xl hover:bg-gray-100 grid place-items-center text-gray-500"
                             aria-label="Notificaciones">
@@ -550,6 +533,74 @@
                 © 2026 Universidad Tecnológica Metropolitana · UTM Desk NoSQL Cloud — Conectado a MongoDB Atlas & Cloudinary en vivo
             </footer>
         </div>
+    </div>
+
+    <!-- ================= MODAL: ALTA DE USUARIO ================= -->
+    <div id="modalAddUser" class="modal fixed inset-0 z-50 bg-gray-900/50 backdrop-blur-sm grid place-items-center p-4"
+        role="dialog" aria-modal="true">
+        <form id="formAddUser" class="panel bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden">
+            <div
+                class="px-6 sm:px-8 py-5 bg-gradient-to-r from-green-800 to-green-600 text-white flex items-start gap-4">
+                <div class="w-11 h-11 rounded-xl bg-white/15 grid place-items-center">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold">Nuevo usuario</h2>
+                    <p class="text-xs text-green-100 mt-1">Alta institucional en MongoDB Atlas</p>
+                </div>
+            </div>
+            <div class="p-6 sm:p-8 grid sm:grid-cols-2 gap-5">
+                <div>
+                    <label class="label" for="addPrimerNombre">Nombre *</label>
+                    <input id="addPrimerNombre" class="field" required autocomplete="given-name" />
+                </div>
+                <div>
+                    <label class="label" for="addApellidoPaterno">Apellido paterno *</label>
+                    <input id="addApellidoPaterno" class="field" required autocomplete="family-name" />
+                </div>
+                <div class="sm:col-span-2">
+                    <label class="label" for="addCorreo">Correo institucional *</label>
+                    <input id="addCorreo" type="email" class="field" required placeholder="usuario@utm.edu.mx"
+                        autocomplete="email" />
+                </div>
+                <div class="sm:col-span-2">
+                    <label class="label" for="addRol">Rol *</label>
+                    <select id="addRol" class="field" required>
+                        <option value="reportante">Reportante</option>
+                        <option value="tecnico">Técnico</option>
+                        <option value="coordinador">Coordinador</option>
+                        <option value="directivo">Directivo</option>
+                        <option value="administrador">Administrador</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="label" for="addPassword">Crear contraseña *</label>
+                    <input id="addPassword" type="password" class="field" required minlength="8"
+                        autocomplete="new-password" />
+                </div>
+                <div>
+                    <label class="label" for="addPasswordConfirm">Verificar contraseña *</label>
+                    <input id="addPasswordConfirm" type="password" class="field" required minlength="8"
+                        autocomplete="new-password" />
+                </div>
+                <div id="addPerfilWrap" class="sm:col-span-2">
+                    <label class="label" for="addPerfil">Perfil</label>
+                    <select id="addPerfil" class="field">
+                        <option value="docente">Docente</option>
+                        <option value="estudiante">Estudiante</option>
+                        <option value="administrativo">Administrativo</option>
+                    </select>
+                </div>
+            </div>
+            <div class="px-6 sm:px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
+                <button type="button" id="btnCancelAddUser"
+                    class="px-5 py-2.5 rounded-xl border border-gray-300 font-semibold text-gray-700 hover:bg-white">Cancelar</button>
+                <button type="submit"
+                    class="px-6 py-2.5 rounded-xl bg-green-700 hover:bg-green-800 text-white font-semibold shadow-lg shadow-green-700/25">
+                    <i class="fa-solid fa-user-plus mr-1.5"></i>Crear usuario
+                </button>
+            </div>
+        </form>
     </div>
 
     <!-- ================= MODAL: ACTUALIZACIÓN ATÓMICA (RF-03) ================= -->

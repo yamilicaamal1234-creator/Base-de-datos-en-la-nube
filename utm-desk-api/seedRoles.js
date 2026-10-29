@@ -1,18 +1,12 @@
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
-const bcrypt = require('bcryptjs');
 
 async function seedRoles() {
   const client = new MongoClient(process.env.MONGO_URI);
   try {
-    if (!process.env.DEMO_PASSWORD) {
-      throw new Error('Falta DEMO_PASSWORD en el archivo .env');
-    }
-    const passwordHash = await bcrypt.hash(process.env.DEMO_PASSWORD, 12);
     await client.connect();
     const db = client.db(process.env.DB_NAME);
     const rolesCol = db.collection('roles');
-    const credencialesCol = db.collection('credenciales');
 
     const defaultUsers = [
       {
@@ -92,23 +86,6 @@ async function seedRoles() {
       await rolesCol.updateOne(
         { correo: u.correo },
         { $set: u },
-        { upsert: true }
-      );
-      await credencialesCol.updateOne(
-        { auth_uid: u.auth_uid },
-        { $set: { auth_uid: u.auth_uid, password_hash: passwordHash } },
-        { upsert: true }
-      );
-    }
-
-    const usuariosExistentes = await rolesCol.find(
-      {},
-      { projection: { auth_uid: 1 } }
-    ).toArray();
-    for (const usuario of usuariosExistentes) {
-      await credencialesCol.updateOne(
-        { auth_uid: usuario.auth_uid },
-        { $setOnInsert: { auth_uid: usuario.auth_uid, password_hash: passwordHash } },
         { upsert: true }
       );
     }

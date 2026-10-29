@@ -196,7 +196,80 @@ $('#usersBody').addEventListener('click', async (e) => {
     }
 });
 
-$('#btnAddUser').addEventListener('click', () => toast('La creación de nuevos usuarios se sincroniza mediante la colección roles de MongoDB.', 'info'));
+const modalAddUser = $('#modalAddUser');
+const formAddUser = $('#formAddUser');
+const addRol = $('#addRol');
+const addPerfilWrap = $('#addPerfilWrap');
+
+function closeAddUserModal() {
+    modalAddUser.classList.remove('show');
+    formAddUser.reset();
+}
+
+$('#btnAddUser').addEventListener('click', () => {
+    formAddUser.reset();
+    addPerfilWrap.classList.remove('hidden');
+    modalAddUser.classList.add('show');
+    setTimeout(() => $('#addPrimerNombre').focus(), 200);
+});
+
+$('#btnCancelAddUser').addEventListener('click', closeAddUserModal);
+modalAddUser.addEventListener('click', (e) => {
+    if (e.target === modalAddUser) closeAddUserModal();
+});
+
+addRol.addEventListener('change', () => {
+    addPerfilWrap.classList.toggle('hidden', addRol.value !== 'reportante');
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalAddUser.classList.contains('show')) closeAddUserModal();
+});
+
+formAddUser.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const password = $('#addPassword').value;
+    const passwordConfirm = $('#addPasswordConfirm').value;
+    if (password.length < 8) {
+        toast('La contraseña debe tener al menos <b>8 caracteres</b>.', 'warn');
+        $('#addPassword').focus();
+        return;
+    }
+    if (password !== passwordConfirm) {
+        toast('Las contraseñas <b>no coinciden</b>.', 'warn');
+        $('#addPasswordConfirm').focus();
+        return;
+    }
+
+    const payload = {
+        primer_nombre: $('#addPrimerNombre').value.trim(),
+        apellido_paterno: $('#addApellidoPaterno').value.trim(),
+        correo: $('#addCorreo').value.trim(),
+        rol: addRol.value,
+        perfil: $('#addPerfil').value,
+        password,
+        password_confirm: passwordConfirm,
+        activo: true
+    };
+
+    const submitBtn = formAddUser.querySelector('button[type="submit"]');
+    const originalBtnHTML = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creando usuario…';
+
+    try {
+        await apiCrearUsuario(payload);
+        toast(`Usuario <b>${payload.primer_nombre} ${payload.apellido_paterno}</b> creado en MongoDB Atlas.`, 'ok');
+        closeAddUserModal();
+        await renderAdmin();
+    } catch (err) {
+        toast(`Error al crear usuario: ${err.message}`, 'warn');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHTML;
+    }
+});
 
 // =========================================================
 //  INIT

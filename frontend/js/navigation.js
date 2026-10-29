@@ -13,6 +13,16 @@ function renderNav() {
       </button>`).join('');
 }
 
+function openSidebar() {
+    $('#sidebar').classList.remove('-translate-x-full');
+    $('#overlay').classList.remove('hidden');
+}
+
+function closeSidebar() {
+    $('#sidebar').classList.add('-translate-x-full');
+    $('#overlay').classList.add('hidden');
+}
+
 function setRole(r, silent = false) {
     role = r;
     const displayName = (currentUser && currentUser.nombre) ? currentUser.nombre : (USERS[r] ? USERS[r].name : r);
@@ -45,10 +55,7 @@ document.addEventListener('click', (e) => {
     const g = e.target.closest('[data-goto]');
     if (g) showView(g.dataset.goto);
 });
-$('#roleSelect').addEventListener('change', (e) => setRole(e.target.value));
 
 // Sidebar móvil
-const openSidebar = () => { $('#sidebar').classList.remove('-translate-x-full'); $('#overlay').classList.remove('hidden'); };
-const closeSidebar = () => { $('#sidebar').classList.add('-translate-x-full'); $('#overlay').classList.add('hidden'); };
 $('#btnMenu').addEventListener('click', openSidebar);
 $('#overlay').addEventListener('click', closeSidebar);

@@ -26,7 +26,7 @@ async function obtenerIncidencias(req, res) {
 async function crearIncidencia(req, res) {
   try {
     const db = getDB();
-
+    
     // 1. Extraer y parsear datos (soporta multipart/form-data o JSON puro)
     let datos = req.body;
     if (req.body.datos) {
