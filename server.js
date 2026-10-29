@@ -1,13 +1,15 @@
-require("dotenv").config();
+require("dotenv").config({ path: require("path").join(__dirname, ".env") });
 const express = require("express");
 const cors = require("cors");
 const { connectDB } = require("./config/db");
 const incidenciasRoutes = require('./routes/incidenciasRoutes');
+const authRoutes = require('./routes/authRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use('/api/auth', authRoutes);
 app.use('/api/incidencias', incidenciasRoutes);
 app.get("/api/health", async (req, res) => {
   try {
