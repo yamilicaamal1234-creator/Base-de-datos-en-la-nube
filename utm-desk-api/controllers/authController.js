@@ -39,10 +39,18 @@ async function login(req, res) {
     const db = getDB();
     const cleanEmail = email.trim().toLowerCase();
 
-    // Buscar en colección roles por correo (insensible a mayúsculas)
-    const usuario = await db.collection('roles').findOne({
+    // Buscar en colección roles por correo (insensible a mayúsculas y tolerante a variantes de dominio)
+    let usuario = await db.collection('roles').findOne({
       correo: { $regex: new RegExp(`^${cleanEmail}$`, 'i') }
     });
+
+    if (!usuario) {
+      // Tolerar typo común "utmtropolitana" sin la "e"
+      const varianteDominio = cleanEmail.replace('@utmtropolitana.edu.mx', '@utmetropolitana.edu.mx');
+      usuario = await db.collection('roles').findOne({
+        correo: { $regex: new RegExp(`^${varianteDominio}$`, 'i') }
+      });
+    }
 
     if (!usuario) {
       return res.status(404).json({ error: 'Usuario no encontrado en el sistema institucional' });

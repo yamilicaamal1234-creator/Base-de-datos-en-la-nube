@@ -7,4 +7,5 @@ frontend/
     ├── navigation.js  (Roles, vistas y navegación del menú lateral)
     ├── tickets.js     (Formulario polimórfico, evidencias y creación de reportes)
     ├── kanban.js      (Tablero Kanban, modos de visualización y modal de actualización)
-    └── analytics.js   (KPIs, gráficos analíticos y panel de administración)
+    ├── analytics.js   (KPIs, gráficos analíticos y panel de administración)
+    └── notifications.js (Centro de notificaciones, alertas en tiempo real y dropdown)

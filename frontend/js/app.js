@@ -26,6 +26,24 @@ const CAT_LABEL = { redes: 'Cómputo / Redes', infra: 'Infraestructura', academi
 const CAT_ICON = { redes: 'fa-network-wired', infra: 'fa-building', academico: 'fa-graduation-cap' };
 const TECNICOS = ['Carlos Ruiz', 'Ana Torres', 'Jorge Pech', 'Sofía Canul'];
 
+// Catálogo oficial de edificios del campus UTM
+const EDIFICIOS = [
+    'Edificio C',
+    'Edificio J',
+    'Edificio F',
+    'Edificio G',
+    'Edificio M',
+    'Edificio T',
+    'Edificio N',
+    'Edificio R',
+    'Vinculación',
+    'Pesado 1',
+    'Pesado 2',
+    'Rectoría',
+    'Servicios Escolares',
+    'Biblioteca'
+];
+
 const USERS = {
     'Reportante': { name: 'Laura Méndez', ini: 'LM', email: 'laura.mendez@utm.edu.mx' },
     'Técnico': { name: 'Carlos Ruiz', ini: 'CR', email: 'carlos.ruiz@utm.edu.mx' },
@@ -54,6 +72,7 @@ async function cargarIncidenciasDesdeAPI() {
         const data = await apiGetIncidencias();
         tickets = data;
         renderNav();
+        if (typeof generarNotificaciones === 'function') generarNotificaciones();
         if (currentView === 'gestion') renderGestion();
         if (currentView === 'mis') renderMis();
         if (currentView === 'analitica') renderAnalitica();
@@ -64,8 +83,15 @@ async function cargarIncidenciasDesdeAPI() {
 
 // Datos agregados simulados para analítica (histórico)
 const HORAS_EDIFICIO = [
-    { e: 'Edificio D · Talleres', h: 9.4 }, { e: 'Edificio C', h: 7.1 }, { e: 'Rectoría', h: 5.3 },
-    { e: 'Edificio A', h: 4.6 }, { e: 'Edificio B', h: 3.8 }, { e: 'Biblioteca', h: 2.2 },
+    { e: 'Edificio C', h: 7.8 },
+    { e: 'Edificio G', h: 6.9 },
+    { e: 'Pesado 1', h: 6.1 },
+    { e: 'Edificio J', h: 5.5 },
+    { e: 'Vinculación', h: 4.8 },
+    { e: 'Edificio F', h: 4.2 },
+    { e: 'Rectoría', h: 3.6 },
+    { e: 'Servicios Escolares', h: 3.1 },
+    { e: 'Biblioteca', h: 2.2 },
 ];
 const TOP_TAGS = [
     ['sin-red', 48], ['techo', 37], ['filtracion', 33], ['moodle', 29], ['switch', 25],

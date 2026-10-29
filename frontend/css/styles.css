@@ -176,3 +176,76 @@
     background: #cbd5e1;
     border-radius: 8px;
 }
+
+/* =========================================================
+   Animación de movimiento del Logo del Login al tocarlo
+   ========================================================= */
+
+@keyframes logoMove {
+    0% {
+        transform: scale(1) rotate(0deg) translateY(0);
+    }
+    20% {
+        transform: scale(0.9) rotate(-14deg) translateY(-4px);
+    }
+    40% {
+        transform: scale(1.15) rotate(12deg) translateY(-10px);
+    }
+    60% {
+        transform: scale(0.95) rotate(-6deg) translateY(-3px);
+    }
+    80% {
+        transform: scale(1.05) rotate(3deg) translateY(0);
+    }
+    100% {
+        transform: scale(1) rotate(0deg) translateY(0);
+    }
+}
+
+.logo-moving {
+    animation: logoMove 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* =========================================================
+   Fondo interactivo temático de Mesa de Ayuda (Login)
+   ========================================================= */
+
+.bg-tech-grid {
+    background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 50px 50px;
+}
+
+@keyframes floatBadge1 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(1deg); }
+}
+
+@keyframes floatBadge2 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-16px) rotate(-1.5deg); }
+}
+
+@keyframes floatBadge3 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(1deg); }
+}
+
+@keyframes floatBadge4 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-14px) rotate(-1deg); }
+}
+
+.anim-float-1 { animation: floatBadge1 7s ease-in-out infinite; }
+.anim-float-2 { animation: floatBadge2 8.5s ease-in-out infinite; }
+.anim-float-3 { animation: floatBadge3 6.5s ease-in-out infinite; }
+.anim-float-4 { animation: floatBadge4 9s ease-in-out infinite; }
+
+@keyframes orbPulse {
+    0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.25; }
+    50% { transform: scale(1.15) translate(15px, -15px); opacity: 0.4; }
+}
+
+.anim-orb-1 { animation: orbPulse 10s ease-in-out infinite; }
+.anim-orb-2 { animation: orbPulse 14s ease-in-out infinite reverse; }

@@ -34,11 +34,81 @@
 
     <!-- ================= PANTALLA DE LOGIN (INICIAL) ================= -->
     <div id="loginScreen"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-green-950 via-green-900 to-green-800">
-        <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-green-800/30">
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-green-950 via-green-900 to-emerald-950 overflow-hidden">
+        
+        <!-- Capa de rejilla tecnológica -->
+        <div class="absolute inset-0 bg-tech-grid opacity-40 pointer-events-none"></div>
+
+        <!-- Orbes de luz ambiental dinámicos -->
+        <div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-emerald-500/20 blur-3xl pointer-events-none anim-orb-1"></div>
+        <div class="absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-green-500/20 blur-3xl pointer-events-none anim-orb-2"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-emerald-900/30 blur-[120px] pointer-events-none"></div>
+
+        <!-- Canvas interactivo de nodos de red y tickets -->
+        <canvas id="loginCanvas" class="absolute inset-0 w-full h-full cursor-crosshair"></canvas>
+
+        <!-- Widgets flotantes temáticos de Mesa de Ayuda -->
+        <!-- Widget 1: Campus y Red -->
+        <div class="hidden lg:flex items-center gap-3 absolute top-8 left-8 p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-white shadow-xl anim-float-1 pointer-events-none select-none max-w-xs z-10">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 grid place-items-center text-lg border border-emerald-400/30">
+                <i class="fa-solid fa-network-wired"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-1.5 text-xs text-emerald-300 font-semibold tracking-wide uppercase">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Red Activa
+                </div>
+                <p class="text-sm font-bold text-white leading-tight">14 Edificios Conectados</p>
+                <p class="text-[11px] text-emerald-100/70">C, J, F, G, M, T, N, R y más</p>
+            </div>
+        </div>
+
+        <!-- Widget 2: SLA & Rendimiento -->
+        <div class="hidden lg:flex items-center gap-3 absolute top-8 right-8 p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-white shadow-xl anim-float-2 pointer-events-none select-none max-w-xs z-10">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 grid place-items-center text-lg border border-amber-400/30">
+                <i class="fa-solid fa-bolt"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-1.5 text-xs text-amber-300 font-semibold tracking-wide uppercase">
+                    <i class="fa-solid fa-clock-rotate-left"></i> SLA Objetivo
+                </div>
+                <p class="text-sm font-bold text-white leading-tight">98.6% En Tiempo</p>
+                <p class="text-[11px] text-emerald-100/70">Atención priorizada de incidencias</p>
+            </div>
+        </div>
+
+        <!-- Widget 3: NoSQL Database / Tickets -->
+        <div class="hidden lg:flex items-center gap-3 absolute bottom-8 left-8 p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-white shadow-xl anim-float-3 pointer-events-none select-none max-w-xs z-10">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-300 grid place-items-center text-lg border border-cyan-400/30">
+                <i class="fa-solid fa-database"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-1.5 text-xs text-cyan-300 font-semibold tracking-wide uppercase">
+                    <i class="fa-solid fa-shield-halved"></i> Cluster NoSQL
+                </div>
+                <p class="text-sm font-bold text-white leading-tight">MongoDB Atlas Cloud</p>
+                <p class="text-[11px] text-emerald-100/70">Auditoría y trazabilidad atómica</p>
+            </div>
+        </div>
+
+        <!-- Widget 4: Mesa de Ayuda Multicanal -->
+        <div class="hidden lg:flex items-center gap-3 absolute bottom-8 right-8 p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-white shadow-xl anim-float-4 pointer-events-none select-none max-w-xs z-10">
+            <div class="w-10 h-10 rounded-xl bg-green-500/20 text-green-300 grid place-items-center text-lg border border-green-400/30">
+                <i class="fa-solid fa-headset"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-1.5 text-xs text-green-300 font-semibold tracking-wide uppercase">
+                    <i class="fa-solid fa-circle-check"></i> Mesa de Ayuda UTM
+                </div>
+                <p class="text-sm font-bold text-white leading-tight">Soporte Multidisciplinar</p>
+                <p class="text-[11px] text-emerald-100/70">Hardware, Redes, Software y Aulas</p>
+            </div>
+        </div>
+
+        <!-- Card de Login -->
+        <div id="loginCard" class="relative z-20 w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-green-800/30">
             <div class="p-8 text-center bg-gradient-to-b from-green-900 to-green-800 text-white relative">
-                <div
-                    class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-white text-green-800 grid place-items-center shadow-xl">
+                <div id="loginLogo"
+                    class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-white text-green-800 grid place-items-center shadow-xl cursor-pointer select-none transition-transform duration-200 hover:scale-105 active:scale-95">
                     <i class="fa-solid fa-headset text-3xl"></i>
                 </div>
                 <h1 class="text-2xl font-extrabold tracking-tight">UTM Desk</h1>
@@ -62,8 +132,13 @@
                     <div class="relative">
                         <i
                             class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                        <input id="loginPassword" type="password" class="field pl-10" placeholder="••••••••"
+                        <input id="loginPassword" type="password" class="field pl-10 pr-10" placeholder="••••••••"
                             autocomplete="current-password" required />
+                        <button type="button" id="btnTogglePass"
+                            class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
+                            title="Mostrar u ocultar contraseña">
+                            <i class="fa-regular fa-eye text-sm"></i>
+                        </button>
                     </div>
                     <p id="errPassword" class="text-xs text-red-500 font-semibold mt-1 hidden"></p>
                 </div>
@@ -124,19 +199,69 @@
                             incidencias</p>
                     </div>
                     <div class="ml-auto flex items-center gap-3">
-                        <button
-                            class="relative w-10 h-10 rounded-xl hover:bg-gray-100 grid place-items-center text-gray-500"
-                            aria-label="Notificaciones">
-                            <i class="fa-regular fa-bell"></i><span
-                                class="absolute top-2 right-2 w-2 h-2 rounded-full bg-green-600"></span>
-                        </button>
-                        <div class="flex items-center gap-2 pl-3 border-l border-gray-200">
-                            <div id="avatar"
-                                class="w-9 h-9 rounded-full bg-gradient-to-br from-green-600 to-green-800 text-white grid place-items-center text-sm font-bold">
-                                LM</div>
-                            <div class="hidden sm:block leading-tight">
-                                <p id="userName" class="text-sm font-semibold text-gray-900">Laura Méndez</p>
-                                <p id="userRole" class="text-[11px] text-green-700 font-medium">Reportante</p>
+                        <!-- Botón y Menú Desplegable de Notificaciones -->
+                        <div class="relative">
+                            <button id="btnNotif"
+                                class="relative w-10 h-10 rounded-xl hover:bg-gray-100 grid place-items-center text-gray-600 transition"
+                                aria-label="Notificaciones" title="Ver notificaciones">
+                                <i class="fa-regular fa-bell text-lg"></i>
+                                <span id="notifBadge"
+                                    class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-green-600 rounded-full flex items-center justify-center border-2 border-white shadow-sm">0</span>
+                            </button>
+
+                            <!-- Dropdown de Notificaciones -->
+                            <div id="notifDropdown"
+                                class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
+                                <div class="px-4 py-3 bg-gradient-to-r from-green-900 to-green-800 text-white flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fa-solid fa-bell text-sm text-green-300"></i>
+                                        <span class="font-bold text-sm">Notificaciones</span>
+                                        <span id="notifCountHeader"
+                                            class="text-[11px] font-semibold bg-white/20 text-green-100 px-2 py-0.5 rounded-full">0 nuevas</span>
+                                    </div>
+                                    <button id="btnMarkAllRead" type="button"
+                                        class="text-xs text-green-200 hover:text-white font-medium hover:underline transition">
+                                        Marcar leídas
+                                    </button>
+                                </div>
+                                <div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-gray-100">
+                                    <!-- Generadas por JS -->
+                                </div>
+                                <div class="p-2.5 bg-gray-50 border-t border-gray-100 text-center">
+                                    <span class="text-[11px] text-gray-400">Actualizaciones del sistema en tiempo real</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- PERFIL DE USUARIO Y SELECTOR EXCLUSIVO PARA ADMINISTRADOR -->
+                        <div class="relative">
+                            <button id="btnUserProfile" type="button"
+                                class="flex items-center gap-2.5 pl-3 pr-2 py-1.5 rounded-2xl border-l border-gray-200 text-left transition select-none"
+                                aria-label="Perfil de usuario">
+                                <div id="avatar"
+                                    class="w-9 h-9 rounded-full bg-gradient-to-br from-green-600 to-green-800 text-white grid place-items-center text-sm font-bold shrink-0 shadow-sm">
+                                    LM</div>
+                                <div class="hidden sm:block leading-tight">
+                                    <div class="flex items-center gap-1.5">
+                                        <p id="userName" class="text-sm font-semibold text-gray-900">Laura Méndez</p>
+                                        <i id="userRoleChevron" class="fa-solid fa-chevron-down text-[10px] text-gray-400 hidden transition-transform duration-200"></i>
+                                    </div>
+                                    <p id="userRole" class="text-[11px] text-green-700 font-medium">Reportante</p>
+                                </div>
+                            </button>
+
+                            <!-- Dropdown para cambiar de rol (Visible únicamente para Administradores) -->
+                            <div id="roleDropdown"
+                                class="hidden absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
+                                <div class="px-4 py-3 bg-gradient-to-r from-green-900 to-green-800 text-white">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-green-200">Rol de tu cuenta</p>
+                                        <span class="text-[10px] font-semibold bg-white/20 text-green-100 px-2 py-0.5 rounded-full">Cambiar rol</span>
+                                    </div>
+                                    <p class="text-xs text-white/90 font-medium mt-0.5">Asignar rol a tu perfil:</p>
+                                </div>
+                                <div class="p-2 space-y-1" id="roleOptionsList">
+                                    <!-- Opciones generadas por JS -->
+                                </div>
                             </div>
                         </div>
 
@@ -186,12 +311,20 @@
                                 <div>
                                     <label class="label" for="edificio">Edificio / Ubicación</label>
                                     <select id="edificio" name="edificio" class="field">
-                                        <option>Edificio A</option>
-                                        <option>Edificio B</option>
                                         <option>Edificio C</option>
-                                        <option>Edificio D · Talleres</option>
-                                        <option>Biblioteca</option>
+                                        <option>Edificio J</option>
+                                        <option>Edificio F</option>
+                                        <option>Edificio G</option>
+                                        <option>Edificio M</option>
+                                        <option>Edificio T</option>
+                                        <option>Edificio N</option>
+                                        <option>Edificio R</option>
+                                        <option>Vinculación</option>
+                                        <option>Pesado 1</option>
+                                        <option>Pesado 2</option>
                                         <option>Rectoría</option>
+                                        <option>Servicios Escolares</option>
+                                        <option>Biblioteca</option>
                                     </select>
                                 </div>
                                 <div>
@@ -677,6 +810,7 @@
     <script src="js/tickets.js"></script>
     <script src="js/kanban.js"></script>
     <script src="js/analytics.js"></script>
+    <script src="js/notifications.js"></script>
 </body>
 
 </html>
