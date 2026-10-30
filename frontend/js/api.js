@@ -38,7 +38,7 @@ async function apiFetch(endpoint, options = {}) {
     }
 
     try {
-        const response = await fetch(url, { ...options, headers });
+        const response = await fetch(url, { ...options, headers, cache: 'no-store' });
         const data = await response.json().catch(() => ({}));
 
         if (!response.ok) {
@@ -71,7 +71,8 @@ async function apiGetPerfil() {
 /** Obtener todas las incidencias (filtradas automáticamente por rol en el backend) */
 async function apiGetIncidencias() {
     const data = await apiFetch('/incidencias');
-    return data.map(normalizarIncidenciaParaFrontend);
+    const incidencias = Array.isArray(data) ? data : (data.incidencias || []);
+    return incidencias.map(normalizarIncidenciaParaFrontend);
 }
 
 /** Crear nueva incidencia (soporta FormData con archivo real para Cloudinary) */

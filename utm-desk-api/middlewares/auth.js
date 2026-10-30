@@ -9,14 +9,13 @@ async function verificarTokenYRol(req, res, next) {
     }
 
     const token = authHeader.split(' ')[1];
-    const JWT_SECRET = process.env.JWT_SECRET;
+    const JWT_SECRET = process.env.SUPABASE_JWT_SECRET;
     if (!JWT_SECRET) {
       return res.status(500).json({ error: 'Configuración de autenticación incompleta' });
     }
 
     const decoded = jwt.verify(token, JWT_SECRET, {
-      algorithms: ['HS256'],
-      issuer: 'utm-desk-api'
+      algorithms: ['HS256']
     });
 
     if (!decoded || !decoded.sub) {
