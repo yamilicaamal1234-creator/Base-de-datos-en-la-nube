@@ -115,6 +115,7 @@ let usuariosEnDB = [];
 async function renderAdmin() {
     try {
         usuariosEnDB = await apiGetUsuarios();
+        await cargarTecnicosDesdeAPI();
     } catch (err) {
         console.warn('Error al obtener usuarios para admin:', err);
     }
