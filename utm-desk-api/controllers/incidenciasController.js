@@ -243,19 +243,28 @@ async function actualizarEstadoIncidencia(req, res) {
 
     // Si se asignó un técnico
     if (tecnico_asignado && typeof tecnico_asignado === 'object' && tecnico_asignado.auth_uid) {
-      actualizacion.$set.tecnico_asignado = {
+      const tec = await db.collection('roles').findOne({
         auth_uid: tecnico_asignado.auth_uid,
-        primer_nombre: tecnico_asignado.primer_nombre,
-        apellido_paterno: tecnico_asignado.apellido_paterno,
-        rol: "tecnico"
-      };
+        rol: 'tecnico',
+        activo: { $ne: false }
+      });
+      if (tec) {
+        actualizacion.$set.tecnico_asignado = {
+          auth_uid: tec.auth_uid || tec._id.toString(),
+          primer_nombre: tec.primer_nombre,
+          apellido_paterno: tec.apellido_paterno,
+          rol: "tecnico"
+        };
+      }
     } else if (typeof tecnico_asignado === 'string' && tecnico_asignado.trim()) {
-      // Buscar técnico por nombre
+      // Compatibilidad: buscar técnico por nombre completo o nombre_usuario
+      const nombreBuscado = tecnico_asignado.trim();
       const tec = await db.collection('roles').findOne({
         rol: 'tecnico',
+        activo: { $ne: false },
         $or: [
-          { primer_nombre: { $regex: new RegExp(tecnico_asignado.trim(), 'i') } },
-          { nombre_usuario: { $regex: new RegExp(tecnico_asignado.trim(), 'i') } }
+          { primer_nombre: { $regex: new RegExp(nombreBuscado, 'i') } },
+          { nombre_usuario: { $regex: new RegExp(nombreBuscado, 'i') } }
         ]
       });
       if (tec) {

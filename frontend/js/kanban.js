@@ -128,7 +128,12 @@ function openModal(id, presetEstado) {
     if (!editing) return;
     $('#mTitle').textContent = `${editing.id} · ${editing.titulo}`;
     $('#mEstado').innerHTML = ESTADOS.map((s) => `<option ${s === (presetEstado || editing.estado) ? 'selected' : ''}>${s}</option>`).join('');
-    $('#mTecnico').innerHTML = TECNICOS.map((t) => `<option ${t === editing.tecnico ? 'selected' : ''}>${t}</option>`).join('');
+    $('#mTecnico').innerHTML = TECNICOS.map((t) =>
+        `<option value="${esc(t.auth_uid)}" ${t.nombre === editing.tecnico ? 'selected' : ''}>${esc(t.nombre)}</option>`
+    ).join('');
+    if (!TECNICOS.length) {
+        $('#mTecnico').innerHTML = `<option value="">Sin técnicos disponibles</option>`;
+    }
     const canAssign = ['Coordinador', 'Administrador'].includes(role);
     $('#mTecnico').disabled = !canAssign;
     $('#mTecLock').innerHTML = canAssign ? '' : '<i class="fa-solid fa-lock ml-1"></i> solo Coordinador';
@@ -146,10 +151,14 @@ function renderOp() {
     const nuevoEstado = $('#mEstado').value;
     const horasASumar = Number($('#mHoras').value) || 0;
     const nombreActor = currentUser ? currentUser.nombre : USERS[role]?.name || 'Técnico';
+    const tecnicoSeleccionado = TECNICOS.find((t) => t.auth_uid === $('#mTecnico').value) || null;
 
     const set = { estado: nuevoEstado.toLowerCase() };
-    if ($('#mTecnico').value !== editing.tecnico) {
-        set['tecnico_asignado.primer_nombre'] = $('#mTecnico').value;
+    if (tecnicoSeleccionado && tecnicoSeleccionado.nombre !== editing.tecnico) {
+        set['tecnico_asignado.auth_uid'] = tecnicoSeleccionado.auth_uid;
+        set['tecnico_asignado.primer_nombre'] = tecnicoSeleccionado.primer_nombre;
+        set['tecnico_asignado.apellido_paterno'] = tecnicoSeleccionado.apellido_paterno;
+        set['tecnico_asignado.rol'] = 'tecnico';
     }
     if (['Resuelta', 'Cerrada'].includes(nuevoEstado)) {
         set.fecha_resolucion = '$$NOW';
@@ -209,11 +218,12 @@ $('#formUpdate').addEventListener('submit', async (e) => {
     submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Actualizando en MongoDB…';
 
     try {
+        const tecnicoSeleccionado = TECNICOS.find((t) => t.auth_uid === $('#mTecnico').value) || null;
         await apiActualizarEstado(editing.id, {
             estado_nuevo: estado.toLowerCase(),
             horas_invertidas: horas,
             accion: $('#mNota').value.trim() || `Estado actualizado a ${estado}`,
-            tecnico_asignado: $('#mTecnico').value
+            tecnico_asignado: tecnicoSeleccionado
         });
 
         toast(`<b>${editing.id}</b> → ${estado} (+${horas} h) · <span class="font-mono text-xs">MongoDB Atlas actualizado</span>`, 'ok');

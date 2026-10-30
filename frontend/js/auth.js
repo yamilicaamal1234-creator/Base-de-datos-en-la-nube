@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Cargar incidencias reales desde MongoDB Atlas
         await cargarIncidenciasDesdeAPI();
+        await cargarTecnicosDesdeAPI();
     }
 
     // Submit del formulario de Login conectado al backend
