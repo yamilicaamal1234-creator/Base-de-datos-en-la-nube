@@ -29,7 +29,7 @@ async function apiFetch(endpoint, options = {}) {
 
     const headers = { ...options.headers };
     if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
+        headers['Authorization'] = `Bearer ${token}`; 
     }
 
     // Si el body no es FormData, agregamos Content-Type application/json
