@@ -78,6 +78,9 @@ async function cargarIncidenciasDesdeAPI() {
         if (currentView === 'analitica') renderAnalitica();
     } catch (err) {
         console.warn('No se pudieron cargar incidencias del backend:', err.message);
+        if (typeof toast === 'function') {
+            toast(`No se pudieron cargar las incidencias: ${err.message}`, 'warn');
+        }
     }
 }
 

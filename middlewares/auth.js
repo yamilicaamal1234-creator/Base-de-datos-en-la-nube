@@ -11,8 +11,13 @@ async function verificarTokenYRol(req, res, next) {
 
     const token = authHeader.split(' ')[1];
 
-    // 1. Decodificar el token sin forzar un algoritmo específico (soporta HS256 y ES256)
-    const decoded = jwt.decode(token);
+    // 1. Validar firma, expiración y estructura antes de consultar MongoDB
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.SUPABASE_JWT_SECRET);
+    } catch (_) {
+      return res.status(401).json({ error: 'Token inválido o expirado' });
+    }
 
     if (!decoded || !decoded.sub) {
       return res.status(401).json({ error: 'Estructura de token irreconocible' });

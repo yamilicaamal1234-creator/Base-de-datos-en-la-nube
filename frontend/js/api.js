@@ -3,7 +3,10 @@
    Conexión con el Backend Node.js / Express y MongoDB Atlas
    ========================================================= */
 
-const API_BASE_URL = 'https://utm-desk-t096.onrender.com/api';
+const API_HOSTS = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+    ? ['http://localhost:3000', 'https://utm-desk-t096.onrender.com']
+    : ['https://utm-desk-t096.onrender.com'];
+const API_BASE_URL = `${API_HOSTS[0]}/api`;
 
 /** Obtiene el token JWT almacenado */
 function getToken() {
@@ -24,7 +27,6 @@ function clearSession() {
 
 /** Wrapper para realizar peticiones HTTP a la API */
 async function apiFetch(endpoint, options = {}) {
-    const url = `${API_BASE_URL}${endpoint}`;
     const token = getToken();
 
     const headers = { ...options.headers };
@@ -37,20 +39,26 @@ async function apiFetch(endpoint, options = {}) {
         headers['Content-Type'] = 'application/json';
     }
 
-    try {
-        const response = await fetch(url, { ...options, headers });
-        const data = await response.json().catch(() => ({}));
+    let ultimoError = null;
 
-        if (!response.ok) {
-            const errorMsg = data.error || data.mensaje || `Error HTTP ${response.status}`;
-            throw new Error(errorMsg);
+    for (const apiHost of API_HOSTS) {
+        const url = `${apiHost}/api${endpoint}`;
+        try {
+            const response = await fetch(url, { ...options, headers, cache: 'no-store' });
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(data.error || data.mensaje || `Error HTTP ${response.status}`);
+            }
+
+            return data;
+        } catch (err) {
+            ultimoError = err;
+            console.warn(`[API Error] ${apiHost}${endpoint}:`, err.message);
         }
-
-        return data;
-    } catch (err) {
-        console.error(`[API Error] ${endpoint}:`, err);
-        throw err;
     }
+
+    throw ultimoError || new Error('No fue posible conectar con la API');
 }
 
 // ----------------- Métodos de API -----------------
@@ -71,7 +79,8 @@ async function apiGetPerfil() {
 /** Obtener todas las incidencias (filtradas automáticamente por rol en el backend) */
 async function apiGetIncidencias() {
     const data = await apiFetch('/incidencias');
-    return data.map(normalizarIncidenciaParaFrontend);
+    const incidencias = Array.isArray(data) ? data : (data.incidencias || []);
+    return incidencias.map(normalizarIncidenciaParaFrontend);
 }
 
 /** Crear nueva incidencia (soporta FormData con archivo real para Cloudinary) */
