@@ -24,7 +24,29 @@ const CATEGORIAS = [
 ];
 const CAT_LABEL = { redes: 'Cómputo / Redes', infra: 'Infraestructura', academico: 'Académico' };
 const CAT_ICON = { redes: 'fa-network-wired', infra: 'fa-building', academico: 'fa-graduation-cap' };
-const TECNICOS = ['Carlos Ruiz', 'Ana Torres', 'Jorge Pech', 'Sofía Canul'];
+let TECNICOS = [];
+
+/** Carga siempre desde MongoDB los técnicos activos disponibles para asignación. */
+async function cargarTecnicosDesdeAPI() {
+    try {
+        const usuarios = await apiGetUsuarios();
+        TECNICOS = usuarios
+            .filter((u) => (u.rol || '').toLowerCase() === 'tecnico' && u.activo !== false)
+            .map((u) => ({
+                auth_uid: u.auth_uid || u._id?.toString(),
+                primer_nombre: u.primer_nombre || '',
+                apellido_paterno: u.apellido_paterno || '',
+                nombre: `${u.primer_nombre || ''} ${u.apellido_paterno || ''}`.trim(),
+                rol: 'tecnico'
+            }))
+            .filter((u) => u.auth_uid && u.nombre)
+            .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+    } catch (err) {
+        console.warn('No se pudieron cargar los técnicos desde MongoDB:', err.message);
+        TECNICOS = [];
+    }
+    return TECNICOS;
+}
 
 // Catálogo oficial de edificios del campus UTM
 const EDIFICIOS = [
