@@ -3,9 +3,23 @@
    Conexión con el Backend Node.js / Express y MongoDB Atlas
    ========================================================= */
 
-const API_HOSTS = ['localhost', '127.0.0.1'].includes(window.location.hostname)
-    ? ['http://localhost:3000', 'https://utm-desk-t096.onrender.com']
-    : ['https://utm-desk-t096.onrender.com'];
+const PUBLIC_API_HOST = 'https://utm-desk-t096.onrender.com';
+const hostname = window.location.hostname;
+const isLocalhost = ['localhost', '127.0.0.1'].includes(hostname);
+const isPrivateIPv4 = /^10\./.test(hostname)
+    || /^172\.(1[6-9]|2\d|3[01])\./.test(hostname)
+    || /^192\.168\./.test(hostname);
+
+const API_HOSTS = [];
+if (isLocalhost) {
+    API_HOSTS.push('http://localhost:3000');
+} else if (isPrivateIPv4) {
+    API_HOSTS.push(`${window.location.protocol}//${hostname}:3000`);
+}
+if (!window.location.origin.startsWith(PUBLIC_API_HOST)) {
+    API_HOSTS.push(window.location.origin);
+}
+API_HOSTS.push(PUBLIC_API_HOST);
 const API_BASE_URL = `${API_HOSTS[0]}/api`;
 
 /** Obtiene el token JWT almacenado */
