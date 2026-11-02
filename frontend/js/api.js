@@ -3,7 +3,20 @@
    Conexión con el Backend Node.js / Express y MongoDB Atlas
    ========================================================= */
 
-const API_BASE_URL = 'https://utm-desk-t096.onrender.com/api';
+const PUBLIC_API_HOST = 'https://utm-desk-t096.onrender.com';
+const hostname = window.location.hostname;
+const isLocalhost = ['localhost', '127.0.0.1'].includes(hostname);
+const isPrivateIPv4 = /^10\./.test(hostname)
+    || /^172\.(1[6-9]|2\d|3[01])\./.test(hostname)
+    || /^192\.168\./.test(hostname);
+
+const API_HOSTS = [];
+if (isLocalhost) {
+    API_HOSTS.push('http://localhost:3000');
+} else if (isPrivateIPv4) {
+    API_HOSTS.push(`${window.location.protocol}//${hostname}:3000`);
+}
+API_HOSTS.push(PUBLIC_API_HOST);
 
 /** Obtiene el token JWT almacenado */
 function getToken() {
@@ -24,7 +37,6 @@ function clearSession() {
 
 /** Wrapper para realizar peticiones HTTP a la API */
 async function apiFetch(endpoint, options = {}) {
-    const url = `${API_BASE_URL}${endpoint}`;
     const token = getToken();
 
     const headers = { ...options.headers };
@@ -37,20 +49,26 @@ async function apiFetch(endpoint, options = {}) {
         headers['Content-Type'] = 'application/json';
     }
 
-    try {
-        const response = await fetch(url, { ...options, headers, cache: 'no-store' });
-        const data = await response.json().catch(() => ({}));
+    let ultimoError = null;
 
-        if (!response.ok) {
-            const errorMsg = data.error || data.mensaje || `Error HTTP ${response.status}`;
-            throw new Error(errorMsg);
+    for (const apiHost of API_HOSTS) {
+        const url = `${apiHost}/api${endpoint}`;
+        try {
+            const response = await fetch(url, { ...options, headers, cache: 'no-store' });
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(data.error || data.mensaje || `Error HTTP ${response.status}`);
+            }
+
+            return data;
+        } catch (err) {
+            ultimoError = err;
+            console.warn(`[API Error] ${apiHost}${endpoint}:`, err.message);
         }
-
-        return data;
-    } catch (err) {
-        console.error(`[API Error] ${endpoint}:`, err);
-        throw err;
     }
+
+    throw ultimoError || new Error('No fue posible conectar con la API');
 }
 
 // ----------------- Métodos de API -----------------

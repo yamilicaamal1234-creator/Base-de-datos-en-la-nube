@@ -11,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/incidencias', incidenciasRoutes);
+app.use(express.static(require("path").join(__dirname, "..", "frontend")));
 app.get("/api/health", async (req, res) => {
   try {
     const db = require("./config/db").getDB();
@@ -24,8 +25,8 @@ app.get("/api/health", async (req, res) => {
 async function startServer() {
   try {
     await connectDB();
-    app.listen(PORT, () => {
-      console.log(`🚀 Servidor iniciado en http://localhost:${PORT}`);
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`🚀 Servidor iniciado en http://0.0.0.0:${PORT}`);
     });
   } catch (error) {
     console.error("❌ No se pudo iniciar la API:", error.message);
