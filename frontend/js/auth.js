@@ -35,6 +35,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function aplicarSesionUsuario(token, usuario) {
+        if (!token || !usuario || typeof usuario !== 'object') {
+            throw new Error('La API no devolvió una sesión de usuario válida.');
+        }
+
+        usuario.nombre = usuario.nombre || `${usuario.primer_nombre || ''} ${usuario.apellido_paterno || ''}`.trim();
+        if (!usuario.nombre) {
+            usuario.nombre = usuario.correo || 'Usuario';
+        }
+        usuario.rol = String(usuario.rol || usuario.perfil || 'reportante').toLowerCase();
         setSession(token, usuario);
         currentUser = usuario;
 
@@ -98,6 +107,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             try {
                 const res = await apiLogin(email, pass);
+                if (!res || !res.token || !res.usuario) {
+                    throw new Error(res?.error || res?.mensaje || 'La respuesta de inicio de sesión es incompleta.');
+                }
                 await aplicarSesionUsuario(res.token, res.usuario);
                 toast(`Sesión iniciada con éxito como <b>${res.usuario.nombre}</b> (${res.usuario.rol})`, 'ok');
             } catch (err) {
