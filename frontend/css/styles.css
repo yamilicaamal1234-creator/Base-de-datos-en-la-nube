@@ -249,3 +249,33 @@
 
 .anim-orb-1 { animation: orbPulse 10s ease-in-out infinite; }
 .anim-orb-2 { animation: orbPulse 14s ease-in-out infinite reverse; }
+/* ---------- Controles numéricos y modales arrastrables ---------- */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.modal-drag-handle {
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+}
+.modal-drag-handle:active {
+    cursor: grabbing;
+}
+
+/* Ocultar ojito nativo de Microsoft Edge en campos de contraseñas */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input::-ms-reveal,
+input::-ms-clear {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    pointer-events: none !important;
+}

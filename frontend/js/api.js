@@ -99,6 +99,14 @@ async function apiActualizarEstado(codigo, payload) {
     });
 }
 
+/** Eliminar una evidencia específica de una incidencia en Cloudinary y MongoDB Atlas */
+async function apiEliminarEvidencia(codigo, url_storage) {
+    return await apiFetch(`/incidencias/${encodeURIComponent(codigo)}/evidencias`, {
+        method: 'DELETE',
+        body: JSON.stringify({ url_storage }),
+    });
+}
+
 /** Obtener estadísticas calculadas en tiempo real por MongoDB Aggregation */
 async function apiGetEstadisticas() {
     return await apiFetch('/incidencias/dashboard/estadisticas');
@@ -150,12 +158,20 @@ function normalizarIncidenciaParaFrontend(doc) {
     const categoriaUI = doc.categoria === 'infraestructura' ? 'infra' : (doc.categoria || 'redes');
 
     const tecNombre = doc.tecnico_asignado
-        ? `${doc.tecnico_asignado.primer_nombre} ${doc.tecnico_asignado.apellido_paterno}`.trim()
+        ? `${doc.tecnico_asignado.primer_nombre || ''} ${doc.tecnico_asignado.apellido_paterno || ''}`.trim() || 'Técnico asignado'
         : 'Sin asignar';
 
-    const repNombre = doc.reportante
-        ? `${doc.reportante.primer_nombre} ${doc.reportante.apellido_paterno}`.trim()
-        : 'Usuario';
+    let repNombre = 'Usuario';
+    if (doc.reportante) {
+        if (doc.reportante.primer_nombre || doc.reportante.apellido_paterno) {
+            repNombre = `${doc.reportante.primer_nombre || ''} ${doc.reportante.apellido_paterno || ''}`.trim();
+        } else if (doc.reportante.nombre) {
+            repNombre = doc.reportante.nombre;
+        }
+    }
+
+    const repCorreo = doc.reportante?.correo || doc.reportante?.email || '';
+    const repPerfil = doc.reportante?.perfil || doc.reportante?.rol || '';
 
     let edificio = 'Sin especificar';
     if (doc.ubicacion && doc.ubicacion.edificio) {
@@ -163,6 +179,10 @@ function normalizarIncidenciaParaFrontend(doc) {
     } else if (doc.categoria === 'academico') {
         edificio = 'Campus Virtual';
     }
+
+    const fechaISO = doc.fecha_creacion
+        ? (typeof doc.fecha_creacion === 'string' ? doc.fecha_creacion : (doc.fecha_creacion.$date || doc.fecha_creacion))
+        : null;
 
     return {
         id: doc.codigo,
@@ -175,12 +195,17 @@ function normalizarIncidenciaParaFrontend(doc) {
         zona: doc.ubicacion?.zona || '',
         tags: Array.isArray(doc.tags) && doc.tags.length ? doc.tags : ['incidencia'],
         reportante: repNombre,
+        reportante_correo: repCorreo,
+        reportante_perfil: repPerfil,
+        reportante_obj: doc.reportante || null,
         tecnico: tecNombre,
         tecnico_asignado: doc.tecnico_asignado || null,
         horas: Number(doc.horas_invertidas_totales || 0),
-        fecha: doc.fecha_creacion ? new Date(doc.fecha_creacion).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+        fecha: fechaISO ? new Date(fechaISO).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+        fecha_completa: fechaISO,
         evidencias: doc.evidencias_adjuntas || [],
         detalle_especifico: doc.detalle_especifico || {},
         historial_seguimiento: doc.historial_seguimiento || [],
+        raw: doc
     };
 }

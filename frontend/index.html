@@ -360,17 +360,41 @@
                                                     <option>Proyector</option>
                                                 </select>
                                             </div>
-                                            <div><label class="label" for="r_ip">Dirección IP</label>
+                                            <div>
+                                                <div class="flex items-center justify-between mb-1">
+                                                    <label class="label mb-0" for="r_ip">Dirección IP</label>
+                                                    <span class="text-[10px] text-gray-400 font-medium">IPv4 (0.0.0.0 a 255.255.255.255)</span>
+                                                </div>
                                                 <input id="r_ip" name="direccion_ip" class="field font-mono"
                                                     placeholder="192.168.10.45" />
+                                                <p id="r_ip_error" class="text-xs text-red-600 font-medium mt-1 hidden flex items-center gap-1">
+                                                    <i class="fa-solid fa-circle-exclamation text-[11px]"></i>
+                                                    <span id="r_ip_error_text">IP inválida (ej. 192.168.10.45).</span>
+                                                </p>
                                             </div>
-                                            <div><label class="label" for="r_vlan">VLAN</label>
-                                                <input id="r_vlan" name="vlan" type="number" class="field"
+                                            <div>
+                                                <div class="flex items-center justify-between mb-1">
+                                                    <label class="label mb-0" for="r_vlan">VLAN</label>
+                                                    <span class="text-[10px] text-gray-400 font-medium">1 a 4094</span>
+                                                </div>
+                                                <input id="r_vlan" name="vlan" type="number" min="1" max="4094" class="field font-mono"
                                                     placeholder="20" />
+                                                <p id="r_vlan_error" class="text-xs text-red-600 font-medium mt-1 hidden flex items-center gap-1">
+                                                    <i class="fa-solid fa-circle-exclamation text-[11px]"></i>
+                                                    <span id="r_vlan_error_text">VLAN debe ser un entero de 1 a 4094.</span>
+                                                </p>
                                             </div>
-                                            <div><label class="label" for="r_puerto">Puerto de conexión</label>
+                                            <div>
+                                                <div class="flex items-center justify-between mb-1">
+                                                    <label class="label mb-0" for="r_puerto">Puerto de conexión</label>
+                                                    <span class="text-[10px] text-gray-400 font-medium">Ej. Gi1/0/24 o 1-48</span>
+                                                </div>
                                                 <input id="r_puerto" name="puerto" class="field font-mono"
-                                                    placeholder="Gi1/0/24" />
+                                                    placeholder="Gi1/0/24" maxlength="25" />
+                                                <p id="r_puerto_error" class="text-xs text-red-600 font-medium mt-1 hidden flex items-center gap-1">
+                                                    <i class="fa-solid fa-circle-exclamation text-[11px]"></i>
+                                                    <span id="r_puerto_error_text">Puerto inválido (ej. Gi1/0/24, Fa0/1 o 24).</span>
+                                                </p>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -385,7 +409,8 @@
                                             Infraestructura
                                         </legend>
                                         <div class="grid sm:grid-cols-2 gap-4">
-                                            <div><label class="label" for="i_danio">Tipo de daño *</label>
+                                            <div>
+                                                <label class="label mb-1" for="i_danio">Tipo de daño *</label>
                                                 <select id="i_danio" name="tipo_danio" class="field" data-req>
                                                     <option value="">Selecciona…</option>
                                                     <option>Filtración</option>
@@ -395,8 +420,13 @@
                                                     <option>Mobiliario</option>
                                                     <option>Aire acondicionado</option>
                                                 </select>
+                                                <p id="i_danio_error" class="text-xs text-red-600 font-medium mt-1 hidden flex items-center gap-1">
+                                                    <i class="fa-solid fa-circle-exclamation text-[11px]"></i>
+                                                    <span>Selecciona el tipo de daño en instalaciones.</span>
+                                                </p>
                                             </div>
-                                            <div><label class="label" for="i_riesgo">Nivel de riesgo *</label>
+                                            <div>
+                                                <label class="label mb-1" for="i_riesgo">Nivel de riesgo *</label>
                                                 <select id="i_riesgo" name="nivel_riesgo" class="field" data-req>
                                                     <option value="">Selecciona…</option>
                                                     <option>Bajo</option>
@@ -404,18 +434,35 @@
                                                     <option>Alto</option>
                                                     <option>Crítico</option>
                                                 </select>
+                                                <p id="i_riesgo_error" class="text-xs text-red-600 font-medium mt-1 hidden flex items-center gap-1">
+                                                    <i class="fa-solid fa-circle-exclamation text-[11px]"></i>
+                                                    <span>Selecciona el nivel de riesgo estimado.</span>
+                                                </p>
                                             </div>
-                                            <div class="sm:col-span-2"><label class="label" for="i_desc">Descripción del
-                                                    riesgo</label>
+                                            <div class="sm:col-span-2">
+                                                <div class="flex items-center justify-between mb-1">
+                                                    <label class="label mb-0" for="i_desc">Descripción del riesgo *</label>
+                                                    <span class="text-[10px] text-gray-400 font-medium">Mín. 8 caracteres (no solo números)</span>
+                                                </div>
                                                 <textarea id="i_desc" name="descripcion_riesgo" rows="2"
                                                     class="field resize-none"
-                                                    placeholder="Ej. Agua cerca de contactos eléctricos"></textarea>
+                                                    placeholder="Ej. Agua cerca de contactos eléctricos, riesgo de corto circuito" maxlength="400"></textarea>
+                                                <p id="i_desc_error" class="text-xs text-red-600 font-medium mt-1 hidden flex items-center gap-1">
+                                                    <i class="fa-solid fa-circle-exclamation text-[11px]"></i>
+                                                    <span id="i_desc_error_text">Describe el riesgo en al menos 8 caracteres (evita solo números o símbolos).</span>
+                                                </p>
                                             </div>
-                                            <div class="sm:col-span-2"><label class="label" for="i_insumos">Insumos
-                                                    requeridos <span class="font-normal text-gray-400">(separados por
-                                                        coma)</span></label>
+                                            <div class="sm:col-span-2">
+                                                <div class="flex items-center justify-between mb-1">
+                                                    <label class="label mb-0" for="i_insumos">Insumos requeridos <span class="font-normal text-gray-400">(separados por coma)</span></label>
+                                                    <span class="text-[10px] text-gray-400 font-medium">Materiales válidos (ej. cable, pintura)</span>
+                                                </div>
                                                 <input id="i_insumos" name="insumos" class="field"
-                                                    placeholder="impermeabilizante, cubeta, lona" />
+                                                    placeholder="impermeabilizante, cubeta, lona" maxlength="200" />
+                                                <p id="i_insumos_error" class="text-xs text-red-600 font-medium mt-1 hidden flex items-center gap-1">
+                                                    <i class="fa-solid fa-circle-exclamation text-[11px]"></i>
+                                                    <span id="i_insumos_error_text">Ingresa nombres válidos de materiales (ej. pintura, lona; no solo números).</span>
+                                                </p>
                                             </div>
                                             <label
                                                 class="sm:col-span-2 flex items-center gap-3 p-3 rounded-xl bg-white border border-amber-200 cursor-pointer hover:border-amber-400 transition">
@@ -437,7 +484,8 @@
                                                 class="fa-solid fa-graduation-cap mr-1"></i>detalle_especifico ·
                                             Académico</legend>
                                         <div class="grid sm:grid-cols-3 gap-4">
-                                            <div><label class="label" for="a_plataforma">Plataforma *</label>
+                                            <div>
+                                                <label class="label mb-1" for="a_plataforma">Plataforma *</label>
                                                 <select id="a_plataforma" name="plataforma" class="field" data-req>
                                                     <option value="">Selecciona…</option>
                                                     <option>Moodle</option>
@@ -445,17 +493,30 @@
                                                     <option>Microsoft Teams</option>
                                                     <option>Correo institucional</option>
                                                 </select>
+                                                <p id="a_plataforma_error" class="text-xs text-red-600 font-medium mt-1 hidden flex items-center gap-1">
+                                                    <i class="fa-solid fa-circle-exclamation text-[11px]"></i>
+                                                    <span>Selecciona una plataforma.</span>
+                                                </p>
                                             </div>
-                                            <div><label class="label" for="a_periodo">Periodo escolar</label>
+                                            <div>
+                                                <label class="label mb-1" for="a_periodo">Periodo escolar</label>
                                                 <select id="a_periodo" name="periodo" class="field">
                                                     <option>Sep–Dic 2026</option>
                                                     <option>May–Ago 2026</option>
                                                     <option>Ene–Abr 2027</option>
                                                 </select>
                                             </div>
-                                            <div><label class="label" for="a_estudiantes">Estudiantes afectados</label>
+                                            <div>
+                                                <div class="flex items-center justify-between mb-1">
+                                                    <label class="label mb-0" for="a_estudiantes">Estudiantes afectados</label>
+                                                    <span class="text-[10px] text-gray-400 font-medium">0 a 5000</span>
+                                                </div>
                                                 <input id="a_estudiantes" name="estudiantes_afectados" type="number"
-                                                    min="0" class="field" placeholder="35" />
+                                                    min="0" max="5000" class="field" placeholder="35" />
+                                                <p id="a_estudiantes_error" class="text-xs text-red-600 font-medium mt-1 hidden flex items-center gap-1">
+                                                    <i class="fa-solid fa-circle-exclamation text-[11px]"></i>
+                                                    <span id="a_estudiantes_error_text">Debe ser un número entero entre 0 y 5000.</span>
+                                                </p>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -464,8 +525,10 @@
 
                             <!-- Evidencias -->
                             <div class="mt-6">
-                                <span class="label">Evidencias <span class="font-normal text-gray-400">(se suben a
-                                        Cloudinary)</span></span>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="label mb-0">Evidencias <span class="font-normal text-gray-400">(se suben a Cloudinary)</span></span>
+                                    <span id="evidenciasCounter" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-600">0 / 5 archivos</span>
+                                </div>
                                 <label id="dropZone" for="evidencias"
                                     class="flex flex-col items-center justify-center gap-2 p-6 rounded-2xl border-2 border-dashed border-gray-300 hover:border-green-600 hover:bg-green-50/50 cursor-pointer transition text-center">
                                     <div
@@ -474,8 +537,8 @@
                                     </div>
                                     <p class="text-sm font-semibold text-gray-700">Arrastra imágenes aquí o <span
                                             class="text-green-700 underline">explora</span></p>
-                                    <p class="text-xs text-gray-400">PNG, JPG o MP4 · máx. 10 MB</p>
-                                    <input id="evidencias" type="file" multiple accept="image/*,video/*"
+                                    <p class="text-xs text-gray-400">PNG, JPG, WebP o MP4 · Máx. 5 archivos · Hasta 10 MB c/u</p>
+                                    <input id="evidencias" type="file" multiple accept="image/*,video/mp4"
                                         class="hidden" />
                                 </label>
                                 <ul id="fileList" class="mt-3 space-y-2"></ul>
@@ -736,64 +799,246 @@
         </form>
     </div>
 
-    <!-- ================= MODAL: ACTUALIZACIÓN ATÓMICA (RF-03) ================= -->
-    <div id="modalUpdate" class="modal fixed inset-0 z-50 bg-gray-900/50 backdrop-blur-sm grid place-items-center p-4"
+    <!-- ================= MODAL: DETALLE COMPLETO DE INCIDENCIA ================= -->
+    <div id="modalTicketDetail" class="modal fixed inset-0 z-50 bg-gray-900/60 backdrop-blur-sm grid place-items-center p-4 overflow-y-auto"
         role="dialog" aria-modal="true">
-        <form id="formUpdate" class="panel bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden">
-            <div
-                class="px-6 sm:px-8 py-5 bg-gradient-to-r from-green-800 to-green-600 text-white flex items-start gap-4">
-                <div class="w-11 h-11 rounded-xl bg-white/15 grid place-items-center"><i class="fa-solid fa-bolt"></i>
+        <div class="panel bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col">
+            <!-- Encabezado con gradiente -->
+            <div id="modalTicketDetailHeader" class="px-6 sm:px-8 py-5 bg-gradient-to-r from-green-900 via-green-800 to-green-700 text-white flex items-start gap-4 modal-drag-handle">
+                <div class="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-sm grid place-items-center text-xl shrink-0" id="dtCatIcon">
+                    <i class="fa-solid fa-file-lines"></i>
                 </div>
-                <div class="min-w-0">
-                    <p class="text-[11px] uppercase tracking-wider text-green-100 font-bold">RF-03 · Actualización
-                        atómica</p>
-                    <h3 id="mTitle" class="font-bold text-lg truncate">—</h3>
+                <div class="min-w-0 flex-1">
+                    <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                        <span id="dtFolio" class="font-mono text-xs px-2.5 py-0.5 rounded-md bg-white/20 text-white font-bold tracking-wider">—</span>
+                        <span id="dtCatChip" class="text-xs px-2.5 py-0.5 rounded-md bg-white/20 text-white font-medium">—</span>
+                        <span id="dtPrioridad" class="text-xs px-2.5 py-0.5 rounded-md font-bold">—</span>
+                        <span id="dtEstado" class="text-xs px-2.5 py-0.5 rounded-full font-bold ml-auto sm:ml-0 shadow-sm">—</span>
+                    </div>
+                    <h3 id="dtTitulo" class="font-bold text-lg sm:text-xl text-white leading-snug break-words">—</h3>
                 </div>
                 <button type="button" data-close
-                    class="ml-auto w-9 h-9 rounded-lg hover:bg-white/15 grid place-items-center" aria-label="Cerrar"><i
-                        class="fa-solid fa-xmark"></i></button>
+                    class="w-9 h-9 rounded-xl hover:bg-white/20 grid place-items-center text-white/80 hover:text-white transition shrink-0" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
-            <div class="p-6 sm:p-8 grid sm:grid-cols-2 gap-5">
-                <div>
-                    <label class="label" for="mEstado">Nuevo estado</label>
-                    <select id="mEstado" class="field"></select>
-                </div>
-                <div>
-                    <label class="label" for="mHoras">Horas invertidas (a sumar)</label>
-                    <div class="relative">
-                        <input id="mHoras" type="number" min="0" step="0.5" value="0" class="field pr-12" />
-                        <span
-                            class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-semibold">hrs</span>
+
+            <!-- Contenido scrollable -->
+            <div class="p-6 sm:p-8 overflow-y-auto space-y-6 flex-1 text-gray-800">
+                
+                <!-- Metadatos de la subida -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <!-- Reportante -->
+                    <div class="p-3.5 bg-gray-50 rounded-2xl border border-gray-100 flex items-center gap-3">
+                        <div id="dtRepAvatar" class="w-10 h-10 rounded-full bg-green-700 text-white text-xs font-bold grid place-items-center shrink-0">LM</div>
+                        <div class="min-w-0">
+                            <p class="text-[10px] uppercase tracking-wider font-semibold text-gray-400">Reportante</p>
+                            <p id="dtReportante" class="font-bold text-xs sm:text-sm text-gray-900 truncate">—</p>
+                            <p id="dtReportanteEmail" class="text-[11px] text-gray-500 truncate" title="">—</p>
+                        </div>
                     </div>
-                    <p id="mHorasActual" class="text-[11px] text-gray-400 mt-1"></p>
+
+                    <!-- Ubicación -->
+                    <div class="p-3.5 bg-gray-50 rounded-2xl border border-gray-100 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 text-base grid place-items-center shrink-0">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-[10px] uppercase tracking-wider font-semibold text-gray-400">Ubicación</p>
+                            <p id="dtEdificio" class="font-bold text-xs sm:text-sm text-gray-900 truncate">—</p>
+                            <p id="dtZona" class="text-[11px] text-gray-500 truncate">Área general</p>
+                        </div>
+                    </div>
+
+                    <!-- Fecha de subida -->
+                    <div class="p-3.5 bg-gray-50 rounded-2xl border border-gray-100 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-sky-100 text-sky-700 text-base grid place-items-center shrink-0">
+                            <i class="fa-regular fa-calendar-check"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-[10px] uppercase tracking-wider font-semibold text-gray-400">Registrada el</p>
+                            <p id="dtFecha" class="font-bold text-xs text-gray-900 leading-tight">—</p>
+                            <span class="text-[10px] text-gray-400">Fecha y hora</span>
+                        </div>
+                    </div>
+
+                    <!-- Técnico asignado -->
+                    <div class="p-3.5 bg-gray-50 rounded-2xl border border-gray-100 flex items-center gap-3">
+                        <div id="dtTecAvatar" class="w-10 h-10 rounded-full bg-gray-800 text-white text-xs font-bold grid place-items-center shrink-0">CR</div>
+                        <div class="min-w-0">
+                            <p class="text-[10px] uppercase tracking-wider font-semibold text-gray-400">Atención</p>
+                            <p id="dtTecnico" class="font-bold text-xs sm:text-sm text-gray-900 truncate">—</p>
+                            <p id="dtHoras" class="text-[11px] text-green-700 font-semibold"><i class="fa-regular fa-clock mr-1"></i>0 h</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="sm:col-span-2">
-                    <label class="label" for="mTecnico">Técnico asignado <span id="mTecLock"
-                            class="font-normal text-gray-400"></span></label>
-                    <select id="mTecnico" class="field"></select>
+
+                <!-- Descripción detallada con la que se subió -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-align-left text-green-700"></i> Descripción Completa del Problema
+                    </h4>
+                    <div id="dtDescripcion" class="p-4 rounded-2xl bg-gray-50 border border-gray-200 text-gray-800 text-sm leading-relaxed whitespace-pre-line break-words">
+                        —
+                    </div>
                 </div>
-                <div class="sm:col-span-2">
-                    <label class="label" for="mNota">Nota / solución aplicada</label>
-                    <textarea id="mNota" rows="2" class="field resize-none"
-                        placeholder="Se reemplazó el patch cord del puerto 24…"></textarea>
+
+                <!-- Detalles Técnicos Polimórficos -->
+                <div id="dtDetallesPolimorficos" class="rounded-2xl border border-gray-200 p-5 bg-gradient-to-b from-gray-50/70 to-white shadow-sm">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-gray-700 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-green-700"></i>
+                        <span id="dtDetallesTitulo">Detalles Técnicos Específicos</span>
+                    </h4>
+                    <div id="dtDetallesContenido" class="grid sm:grid-cols-2 gap-3 text-xs">
+                        <!-- Generado dinámicamente -->
+                    </div>
                 </div>
-                <div class="sm:col-span-2">
-                    <p class="label">Operación que se ejecutaría</p>
-                    <pre id="mOp"
-                        class="p-4 rounded-xl bg-gray-900 text-[12px] font-mono text-gray-200 overflow-auto max-h-48"></pre>
+
+                <!-- Etiquetas / Tags -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-tags text-green-700"></i> Etiquetas
+                    </h4>
+                    <div id="dtTags" class="flex flex-wrap gap-1.5">
+                        <!-- Chips -->
+                    </div>
+                </div>
+
+                <!-- Evidencias adjuntas (Cloudinary) -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-cloud-arrow-up text-green-700"></i> Evidencias Adjuntas
+                    </h4>
+                    <div id="dtEvidenciasContainer" class="space-y-2.5">
+                        <!-- Render de evidencias -->
+                    </div>
+                </div>
+
+                <!-- Historial de seguimiento -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-timeline text-green-700"></i> Historial y Registro de Actividad
+                    </h4>
+                    <div id="dtHistorialContainer" class="space-y-2">
+                        <!-- Timeline -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Pie del modal -->
+            <div class="px-6 sm:px-8 py-4 bg-gray-50 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3">
+                <button type="button" data-close
+                    class="px-5 py-2.5 rounded-xl border border-gray-300 font-semibold text-gray-700 hover:bg-white transition text-sm">
+                    Cerrar
+                </button>
+                <div class="flex items-center gap-3">
+                    <button type="button" id="dtBtnActualizar"
+                        class="px-5 py-2.5 rounded-xl bg-green-700 hover:bg-green-800 text-white font-semibold shadow-lg shadow-green-700/25 transition text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Actualizar esta incidencia</span>
+                    </button>
                 </div>
             </div>
-            <div
-                class="px-6 sm:px-8 py-4 bg-gray-50 border-t border-gray-100 flex flex-col-reverse sm:flex-row gap-3 sm:justify-between sm:items-center">
+        </div>
+    </div>
+
+    <!-- ================= MODAL: ACTUALIZACIÓN ATÓMICA (RF-03) ================= -->
+    <div id="modalUpdate" class="modal fixed inset-0 z-50 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+        role="dialog" aria-modal="true">
+        <form id="formUpdate" class="panel bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden my-auto border border-gray-100">
+            <!-- Header compacto con cursor grab para mover la ventana -->
+            <div id="modalUpdateHeader"
+                class="px-5 py-3.5 bg-gradient-to-r from-green-800 to-green-700 text-white flex items-center gap-3 cursor-grab active:cursor-grabbing select-none border-b border-green-900/20">
+                <div class="w-8 h-8 rounded-lg bg-white/15 grid place-items-center text-sm shrink-0">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-green-200">RF-03 · Actualización</span>
+                        <span class="text-[9px] bg-white/20 text-white px-1.5 py-0.5 rounded font-normal inline-flex items-center gap-1">
+                            <i class="fa-solid fa-arrows-up-down-left-right text-[8px]"></i> Arrastrar
+                        </span>
+                    </div>
+                    <h3 id="mTitle" class="font-bold text-sm sm:text-base truncate text-white leading-tight">-</h3>
+                </div>
+                <button type="button" data-close
+                    class="w-8 h-8 rounded-lg hover:bg-white/20 grid place-items-center text-white/80 hover:text-white transition shrink-0" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Formulario limpio, compacto y proporcional -->
+            <div class="p-5 space-y-3.5 text-sm">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                        <label class="label mb-1" for="mEstado">Nuevo estado</label>
+                        <select id="mEstado" class="field py-2 text-sm"></select>
+                    </div>
+
+                    <!-- Horas invertidas limpias, directas, sin sugerencias -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="label mb-0" for="mHoras">Horas invertidas</label>
+                            <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">Se acumularán</span>
+                        </div>
+                        <div class="relative">
+                            <input id="mHoras" type="number" min="0" max="24" step="0.5" value="0"
+                                class="field py-2 text-sm pr-10 font-bold text-gray-800"
+                                placeholder="0" />
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-gray-400 pointer-events-none">hrs</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-gray-500 mt-1 px-0.5">
+                            <span>Acumulado: <b id="mHorasActual" class="text-gray-700">0 h</b></span>
+                            <span id="mHorasTotalPreview" class="text-emerald-700 font-semibold">Total: 0 h</span>
+                        </div>
+                        <p id="mHorasError" class="text-xs text-red-600 font-medium mt-1 hidden"></p>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="label mb-1" for="mTecnico">Técnico asignado <span id="mTecLock" class="font-normal text-gray-400"></span></label>
+                    <select id="mTecnico" class="field py-2 text-sm"></select>
+                </div>
+
+                <div>
+                    <label class="label mb-1" for="mNota">Nota / solución aplicada</label>
+                    <textarea id="mNota" rows="2" class="field py-2 text-sm resize-none"
+                        placeholder="Describe la solución o avance técnico..."></textarea>
+                </div>
+
+                <!-- Evidencias adjuntas actuales con opción de eliminar (RF-03) -->
+                <div id="mEvidenciasSection" class="hidden">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="label mb-0 text-xs flex items-center gap-1.5">
+                            <i class="fa-solid fa-paperclip text-green-700"></i> Evidencias adjuntas 
+                            <span id="mEvidenciasCount" class="font-normal text-gray-400"></span>
+                        </label>
+                        <span class="text-[10px] text-gray-400">Clic en <i class="fa-solid fa-trash-can text-red-500"></i> para quitar</span>
+                    </div>
+                    <div id="mEvidenciasList" class="space-y-1.5 max-h-32 overflow-y-auto pr-0.5"></div>
+                </div>
+
+                <div>
+                    <p class="label mb-1 text-xs text-gray-500">Operación MongoDB (RF-03)</p>
+                    <pre id="mOp"
+                        class="p-2.5 rounded-xl bg-gray-900 text-[11px] font-mono text-gray-200 overflow-auto max-h-24 leading-relaxed"></pre>
+                </div>
+            </div>
+
+            <!-- Botones de pie de formulario compactos -->
+            <div class="px-5 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between gap-2">
                 <button type="button" id="mResolver"
-                    class="text-sm font-semibold text-green-700 hover:text-green-900"><i
-                        class="fa-solid fa-circle-check mr-1"></i>Marcar como Resuelta</button>
-                <div class="flex gap-3">
+                    class="text-xs font-semibold text-green-700 hover:text-green-900 flex items-center gap-1">
+                    <i class="fa-solid fa-circle-check"></i> Marcar Resuelta
+                </button>
+                <div class="flex items-center gap-2">
                     <button type="button" data-close
-                        class="px-5 py-2.5 rounded-xl border border-gray-300 font-semibold text-gray-700 hover:bg-white">Cancelar</button>
+                        class="px-3.5 py-1.5 rounded-lg border border-gray-300 font-semibold text-xs text-gray-700 hover:bg-white transition">Cancelar</button>
                     <button type="submit"
-                        class="px-6 py-2.5 rounded-xl bg-green-700 hover:bg-green-800 text-white font-semibold shadow-lg shadow-green-700/25"><i
-                            class="fa-solid fa-floppy-disk mr-1.5"></i>Aplicar actualización</button>
+                        class="px-4 py-1.5 rounded-lg bg-green-700 hover:bg-green-800 text-white font-semibold text-xs shadow-md shadow-green-700/20 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-floppy-disk"></i> Guardar
+                    </button>
                 </div>
             </div>
         </form>
